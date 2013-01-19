@@ -20,13 +20,16 @@ def show_swap_of_process( pid, options ):
 	    swap = line.split( ' ' )[ 7 ]
 	    if options.short: print '%s %s' % ( pid, swap )
 	    else: print 'Process %s uses %s kB swap memory.' % ( pid, swap )
+	    return int( swap )
 
 
 
 def cli():
-    parser = OptionParser()
-    parser.add_option( '-s', '--short', action = 'store_true', dest = 'short' )
-    parser.add_option( '-v', '--verbose', action = 'store_true', dest = 'verbose' )
+    usage = 'usage: %prog [options] pid [pid...]'
+    parser = OptionParser( usage = usage )
+    parser.add_option( '-s', '--short', action = 'store_true', dest = 'short', help = 'Show only short result messages.' )
+    parser.add_option( '-t', '--total', action = 'store_true', dest = 'total', help = 'Show a line with the total sum of all swap memory (in kB).' )
+    parser.add_option( '-v', '--verbose', action = 'store_true', dest = 'verbose', help = 'Show additional output messages.' )
     ( options, args ) = parser.parse_args()
     return ( options, args )
 
@@ -34,11 +37,14 @@ def cli():
 
 def main():
     ( options, args ) = cli()
+    sum = 0
     for pid in args:
-	show_swap_of_process( pid, options )
+	swap = show_swap_of_process( pid, options )
+	sum += swap
+    if options.total: 
+	if options.short: print sum
+	else: print( 'Total swap space of all given processes: %s' % sum )
     
-    
-
 
 
 main()
