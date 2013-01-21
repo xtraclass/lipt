@@ -37,9 +37,15 @@ def cli():
 def main():
     ( options, args ) = cli()
     size = args[ 0 ]
-    commands.getoutput( 'mkdir /tmp/ramdisk; chmod 777 /tmp/ramdisk' )
-    output = commands.getoutput( 'sudo mount -t tmpfs -o -size=%s tmpfs /tmp/ramdisk' % size )
+    if len( args ) >= 2:
+	dir = args[ 1 ]
+    else:
+	dir = '/tmp/ramdisk'
+
+    commands.getoutput( 'mkdir %s; chmod 777 %s' % ( dir, dir ) )
+    output = commands.getoutput( 'sudo mount -t tmpfs -o size=%s tmpfs %s' % ( size, dir ) )
     print output
+    print 'Created ram disk in directory %s of size %s.' % ( dir, size )
 
 
 

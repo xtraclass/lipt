@@ -1,0 +1,26 @@
+#!/usr/bin/python
+
+from optparse import OptionParser
+import commands
+import urllib2
+
+
+
+def cli():
+    usage = 'usage: %prog [options] pid [pid...]'
+    parser = OptionParser( usage = usage )
+    parser.add_option( '-v', '--verbose', action = 'store_true', dest = 'verbose', help = 'Show additional output messages.' )
+    ( options, args ) = parser.parse_args()
+    return ( options, args )
+
+
+
+def main():
+    url = 'http://icanhazip.com'
+    output = urllib2.urlopen( urllib2.Request( url ) ).read()
+    public_ip = output.split( '\n' )[ 0 ]
+    print public_ip
+
+
+
+main()
