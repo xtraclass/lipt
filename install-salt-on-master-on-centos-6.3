@@ -1,0 +1,25 @@
+#!/usr/bin/python
+
+import sys, commands
+
+
+def call( cmd ):
+  for line in commands.getoutput( cmd ).splitlines():
+    print line
+
+
+def step( message, cmd ):
+  print message
+  call( cmd )
+
+
+step( 'Installing EPEL repository data', 'rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm' )
+step( 'Installing EPEL remi-release repository data', 'rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm' )
+step( 'Enabling remi-release repository', "sed -i -e 's/enabled=0/enabled=1/' /etc/yum.repos.d/remi.repo" )
+
+step( 'Installing salt-master', 'yum -y install salt-master --skip-broken' )
+step( 'Installing salt-minion', 'yum -y install salt-minion --skip-broken' )
+
+step( 'Enabling salt-master', 'chkconfig salt-master on' )
+
+print 'Done.'

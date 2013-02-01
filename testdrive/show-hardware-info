@@ -1,0 +1,31 @@
+#!/usr/bin/python
+
+from optparse import OptionParser
+import commands
+
+
+
+def show_hardware_info( options ):
+    cmd = 'sudo lshw'
+    output = commands.getoutput( cmd ).splitlines()
+    for line in output:
+	print line
+
+
+
+def cli():
+    usage = 'usage: %prog [options] pid [pid...]'
+    parser = OptionParser( usage = usage )
+    parser.add_option( '-v', '--verbose', action = 'store_true', dest = 'verbose', help = 'Show additional output messages.' )
+    ( options, args ) = parser.parse_args()
+    return ( options, args )
+
+
+
+def main():
+    ( options, args ) = cli()
+    show_hardware_info( options )
+
+
+
+main()
